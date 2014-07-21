@@ -14,6 +14,8 @@
 
 @end
 
+const unsigned char SpeechKitApplicationKey[] = {};
+
 @implementation ViewController
 
 - (void)viewDidLoad
@@ -22,6 +24,16 @@
     
     self.messageLabel.text = @"Tap on the mic";
     self.activityIndicator.hidden = YES;
+    
+    if (!self.tableViewDisplayDataArray) {
+        self.tableViewDisplayDataArray = [[NSMutableArray alloc] init];
+    }
+    
+    self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [self.appDelegate updateCurrentLocation];
+    [self.appDelegate setupSpeechKitConnection];
+    
+    self.searchTextField.returnKeyType = UIReturnKeySearch;
 }
 
 - (void)didReceiveMemoryWarning
@@ -87,6 +99,62 @@
 
 - (IBAction)recordButtonTapped:(id)sender {
     self.recordButton.selected = !self.recordButton.isSelected;
+    
+    // This will initialize a new speech recognizer instance
+    if (self.recordButton.isSelected) {
+        self.voiceSearch = [[SKRecognizer alloc] initWithType:SKSearchRecognizerType
+                                                    detection:SKShortEndOfSpeechDetection
+                                                     language:@"en_US"
+                                                     delegate:self];
+    }
+    
+    // This will stop existing speech recognizer processes
+    else {
+        if (self.voiceSearch) {
+            [self.voiceSearch stopRecording];
+            [self.voiceSearch cancel];
+        }
+    }
 }
+
+# pragma mark - SKRecognizer Delegate Methods
+
+- (void)recognizerDidBeginRecording:(SKRecognizer *)recognizer {
+    self.messageLabel.text = @"Listening..";
+}
+
+- (void)recognizerDidFinishRecording:(SKRecognizer *)recognizer {
+    self.messageLabel.text = @"Done Listening..";
+}
+
+- (void)recognizer:(SKRecognizer *)recognizer didFinishWithResults:(SKRecognition *)results {
+    long numOfResults = [results.results count];
+    
+    if (numOfResults > 0) {
+        // update the text of text field with best result from SpeechKit
+        self.searchTextField.text = [results firstResult];
+    }
+    
+    self.recordButton.selected = !self.recordButton.isSelected;
+    
+    if (self.voiceSearch) {
+        [self.voiceSearch cancel];
+    }
+}
+
+- (void)recognizer:(SKRecognizer *)recognizer didFinishWithError:(NSError *)error suggestion:(NSString *)suggestion {
+    self.recordButton.selected = NO;
+    self.messageLabel.text = @"Connection error";
+    self.activityIndicator.hidden = YES;
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                    message:[error localizedDescription]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
 
 @end

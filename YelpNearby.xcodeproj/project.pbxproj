@@ -50,6 +50,10 @@
 		2A2FDDB918505CBC004529D7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A2FDDB818505CBC004529D7 /* AudioToolbox.framework */; };
 		2A2FDDBB18505CC2004529D7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A2FDDBA18505CC2004529D7 /* AVFoundation.framework */; };
 		2A2FDDBE18505DC6004529D7 /* ResultTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A2FDDBD18505DC6004529D7 /* ResultTableViewCell.m */; };
+		EAC950A3197CCEEF001F3915 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC950A2197CCEEF001F3915 /* SpeechKit.framework */; };
+		EAC950A7197CD054001F3915 /* earcon_cancel.wav in Resources */ = {isa = PBXBuildFile; fileRef = EAC950A4197CD054001F3915 /* earcon_cancel.wav */; };
+		EAC950A8197CD054001F3915 /* earcon_done_listening.wav in Resources */ = {isa = PBXBuildFile; fileRef = EAC950A5197CD054001F3915 /* earcon_done_listening.wav */; };
+		EAC950A9197CD054001F3915 /* earcon_listening.wav in Resources */ = {isa = PBXBuildFile; fileRef = EAC950A6197CD054001F3915 /* earcon_listening.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +139,10 @@
 		2A2FDDBA18505CC2004529D7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2A2FDDBC18505DC6004529D7 /* ResultTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultTableViewCell.h; sourceTree = "<group>"; };
 		2A2FDDBD18505DC6004529D7 /* ResultTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultTableViewCell.m; sourceTree = "<group>"; };
+		EAC950A2197CCEEF001F3915 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpeechKit.framework; path = ../../DragonMobileSDK_1.4.10/SpeechKit.framework; sourceTree = "<group>"; };
+		EAC950A4197CD054001F3915 /* earcon_cancel.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = earcon_cancel.wav; sourceTree = "<group>"; };
+		EAC950A5197CD054001F3915 /* earcon_done_listening.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = earcon_done_listening.wav; sourceTree = "<group>"; };
+		EAC950A6197CD054001F3915 /* earcon_listening.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = earcon_listening.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAC950A3197CCEEF001F3915 /* SpeechKit.framework in Frameworks */,
 				2A2FDDBB18505CC2004529D7 /* AVFoundation.framework in Frameworks */,
 				2A2FDDB918505CBC004529D7 /* AudioToolbox.framework in Frameworks */,
 				2A2FDDB718505CB2004529D7 /* CFNetwork.framework in Frameworks */,
@@ -252,6 +261,7 @@
 		2A2FDD3918505B79004529D7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EAC950A2197CCEEF001F3915 /* SpeechKit.framework */,
 				2A2FDDBA18505CC2004529D7 /* AVFoundation.framework */,
 				2A2FDDB818505CBC004529D7 /* AudioToolbox.framework */,
 				2A2FDDB618505CB2004529D7 /* CFNetwork.framework */,
@@ -282,6 +292,9 @@
 		2A2FDD4118505B79004529D7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EAC950A4197CD054001F3915 /* earcon_cancel.wav */,
+				EAC950A5197CD054001F3915 /* earcon_done_listening.wav */,
+				EAC950A6197CD054001F3915 /* earcon_listening.wav */,
 				2A2FDD4218505B79004529D7 /* YelpNearby-Info.plist */,
 				2A2FDD4318505B79004529D7 /* InfoPlist.strings */,
 				2A2FDD4618505B79004529D7 /* main.m */,
@@ -409,10 +422,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAC950A7197CD054001F3915 /* earcon_cancel.wav in Resources */,
 				2A1CA2D518965FCB006D8D62 /* README in Resources */,
 				2A1CA2D218965FCB006D8D62 /* OATestServer.rb in Resources */,
 				2A2FDD5318505B79004529D7 /* Images.xcassets in Resources */,
+				EAC950A9197CD054001F3915 /* earcon_listening.wav in Resources */,
 				2A2FDD4518505B79004529D7 /* InfoPlist.strings in Resources */,
+				EAC950A8197CD054001F3915 /* earcon_done_listening.wav in Resources */,
 				2A2FDD4E18505B79004529D7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,7 +598,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/Jesus/Desktop/DragonMobileSDK_1.4.10,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YelpNearby/YelpNearby-Prefix.pch";
 				INFOPLIST_FILE = "YelpNearby/YelpNearby-Info.plist";
@@ -596,7 +615,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/Jesus/Desktop/DragonMobileSDK_1.4.10,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YelpNearby/YelpNearby-Prefix.pch";
 				INFOPLIST_FILE = "YelpNearby/YelpNearby-Info.plist";

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
+#import <SpeechKit/SpeechKit.h>
 
-@interface ViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface ViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, SpeechKitDelegate, SKRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
 @property (weak, nonatomic) IBOutlet UIButton *recordButton;
@@ -20,6 +21,8 @@
 
 @property (strong, nonatomic) AppDelegate *appDelegate;
 @property (strong, nonatomic) NSMutableArray *tableViewDisplayDataArray;
+
+@property (strong, nonatomic) SKRecognizer* voiceSearch;
 
 - (IBAction)recordButtonTapped:(id)sender;
 
