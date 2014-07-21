@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import <SpeechKit/SpeechKit.h>
+#import "YelpAPIService.h"
 
-@interface ViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, SpeechKitDelegate, SKRecognizerDelegate>
+@interface ViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, SpeechKitDelegate, SKRecognizerDelegate, YelpAPIServiceDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
 @property (weak, nonatomic) IBOutlet UIButton *recordButton;
@@ -21,6 +22,12 @@
 
 @property (strong, nonatomic) AppDelegate *appDelegate;
 @property (strong, nonatomic) NSMutableArray *tableViewDisplayDataArray;
+
+@property (strong, nonatomic) YelpAPIService *yelpService;
+@property (strong, nonatomic) NSString* searchCriteria;
+
+- (NSString *)getYelpCategoryFromSearchText;
+- (void)findNearByRestaurantsFromYelpbyCategory:(NSString *)categoryFilter;
 
 @property (strong, nonatomic) SKRecognizer* voiceSearch;
 

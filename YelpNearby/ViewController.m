@@ -137,6 +137,12 @@ const unsigned char SpeechKitApplicationKey[] = {};
     
     self.recordButton.selected = !self.recordButton.isSelected;
     
+    // This will extract category filter from search text
+    NSString *yelpCategoryFilter = [self getYelpCategoryFromSearchText];
+    
+    // This will find nearby restaurants by category
+    [self findNearByRestaurantsFromYelpbyCategory:yelpCategoryFilter];
+    
     if (self.voiceSearch) {
         [self.voiceSearch cancel];
     }
@@ -156,5 +162,70 @@ const unsigned char SpeechKitApplicationKey[] = {};
     [alert show];
 }
 
+- (NSString *)getYelpCategoryFromSearchText {
+    NSString *categoryFilter;
+    
+    if ([[self.searchTextField.text componentsSeparatedByString:@" restaurant"] count] > 1) {
+        NSCharacterSet *separator = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+        NSArray *trimmedWordArray = [[[self.searchTextField.text componentsSeparatedByString:@"restaurant"] firstObject] componentsSeparatedByCharactersInSet:separator];
+        
+        if ([trimmedWordArray count] > 2) {
+            int objectIndex = (int)[trimmedWordArray count] - 2;
+            categoryFilter = [trimmedWordArray objectAtIndex:objectIndex];
+        }
+        
+        else {
+            categoryFilter = [trimmedWordArray objectAtIndex:0];
+        }
+    }
+    
+    else if (([[self.searchTextField.text componentsSeparatedByString:@" restaurant"] count] <= 1)
+             && self.searchTextField.text &&  self.searchTextField.text.length > 0){
+        categoryFilter = self.searchTextField.text;
+    }
+    
+    return categoryFilter;
+}
+
+- (void)findNearByRestaurantsFromYelpbyCategory:(NSString *)categoryFilter {
+    if (categoryFilter && categoryFilter.length > 0) {
+        if (([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied)
+            && self.appDelegate.currentUserLocation &&
+            self.appDelegate.currentUserLocation.coordinate.latitude) {
+            
+            [self.tableViewDisplayDataArray removeAllObjects];
+            [self.resultTableView reloadData];
+            
+            self.messageLabel.text = @"Fetching results..";
+            self.activityIndicator.hidden = NO;
+            
+            self.yelpService = [[YelpAPIService alloc] init];
+            self.yelpService.delegate = self;
+            
+            self.searchCriteria = categoryFilter;
+            
+            [self.yelpService searchNearByRestaurantsByFilter:[categoryFilter lowercaseString] atLatitude:self.appDelegate.currentUserLocation.coordinate.latitude andLongitude:self.appDelegate.currentUserLocation.coordinate.longitude];
+        }
+        
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location is Disabled"
+                                                            message:@"Enable it in settings and try again"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+    }
+}
+
+# pragma mark - Yelp API Delegate Method
+
+-(void)loadResultWithDataArray:(NSArray *)resultArray {
+    self.messageLabel.text = @"Tap on the mic";
+    self.activityIndicator.hidden = YES;
+    
+    self.tableViewDisplayDataArray = [resultArray mutableCopy];
+    [self.resultTableView reloadData];
+}
 
 @end
