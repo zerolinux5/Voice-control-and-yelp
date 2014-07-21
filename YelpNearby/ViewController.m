@@ -110,6 +110,11 @@ const unsigned char SpeechKitApplicationKey[] = {};
     
     // This will stop existing speech recognizer processes
     else {
+        if (self.isSpeaking) {
+            [self.vocalizer cancel];
+            self.isSpeaking = NO;
+        }
+        
         if (self.voiceSearch) {
             [self.voiceSearch stopRecording];
             [self.voiceSearch cancel];
@@ -226,6 +231,47 @@ const unsigned char SpeechKitApplicationKey[] = {};
     
     self.tableViewDisplayDataArray = [resultArray mutableCopy];
     [self.resultTableView reloadData];
+    
+    if (self.isSpeaking) {
+        [self.vocalizer cancel];
+    }
+    
+    self.isSpeaking = YES;
+    // 1
+    self.vocalizer = [[SKVocalizer alloc] initWithLanguage:@"en_US" delegate:self];
+    
+    if ([self.tableViewDisplayDataArray count] > 0) {
+        // 2
+        [self.vocalizer speakString:[NSString stringWithFormat:@"I found %lu %@ restaurants",
+                                     (unsigned long)[self.tableViewDisplayDataArray count],
+                                     self.searchCriteria]];
+    }
+    
+    else {
+        [self.vocalizer speakString:[NSString stringWithFormat:@"I could not find any %@ restaurants",
+                                     self.searchCriteria]];
+    }
+}
+
+- (void)vocalizer:(SKVocalizer *)vocalizer willBeginSpeakingString:(NSString *)text {
+    self.isSpeaking = YES;
+}
+
+- (void)vocalizer:(SKVocalizer *)vocalizer didFinishSpeakingString:(NSString *)text withError:(NSError *)error {
+    if (error !=nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:[error localizedDescription]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        
+        if (self.isSpeaking) {
+            [self.vocalizer cancel];
+        }
+    }
+    
+    self.isSpeaking = NO;
 }
 
 @end
